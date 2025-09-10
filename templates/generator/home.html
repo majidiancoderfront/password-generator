@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+{% block title %}سازنده پسورد - خانه{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card" data-aos="fade-up" data-aos-duration="1000">
+            <div class="card-header text-center">
+                <h2 data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-shield-alt icon-glow me-3"></i> 
+                    سازنده پسورد امن
+                </h2>
+                <p class="mb-0 mt-3" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-magic me-2"></i>
+                    پسوردهای قوی و امن برای شما
+                </p>
+            </div>
+            <div class="card-body">
+                <form id="passwordForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4" data-aos="fade-right" data-aos-delay="600">
+                                <label for="length" class="form-label">
+                                    <i class="fas fa-ruler me-2"></i>طول پسورد
+                                </label>
+                                <input type="range" class="form-range" id="length" name="length" min="4" max="128" value="12">
+                                <div class="d-flex justify-content-between mt-2">
+                                    <small class="text-muted">4</small>
+                                    <span id="lengthValue" class="badge" style="background: var(--accent-gradient);">12</span>
+                                    <small class="text-muted">128</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-4" data-aos="fade-left" data-aos-delay="600">
+                                <label class="form-label">
+                                    <i class="fas fa-cogs me-2"></i>نوع کاراکترها
+                                </label>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="include_uppercase" name="include_uppercase" checked>
+                                    <label class="form-check-label" for="include_uppercase">
+                                        <i class="fas fa-font me-2"></i>حروف بزرگ (A-Z)
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="include_lowercase" name="include_lowercase" checked>
+                                    <label class="form-check-label" for="include_lowercase">
+                                        <i class="fas fa-text-height me-2"></i>حروف کوچک (a-z)
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="include_numbers" name="include_numbers" checked>
+                                    <label class="form-check-label" for="include_numbers">
+                                        <i class="fas fa-hashtag me-2"></i>اعداد (0-9)
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="include_symbols" name="include_symbols" checked>
+                                    <label class="form-check-label" for="include_symbols">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>نمادها (!@#$%^&*)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2" data-aos="zoom-in" data-aos-delay="800">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i> تولید پسورد
+                        </button>
+                    </div>
+                </form>
+
+                <div id="passwordResult" class="mt-4" style="display: none;" data-aos="fade-up" data-aos-duration="1000">
+                    <h5 class="text-center mb-3">
+                        <i class="fas fa-key me-2"></i>پسورد تولید شده:
+                    </h5>
+                    <div class="password-display">
+                        <span id="generatedPassword"></span>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-success me-2" onclick="copyPassword()">
+                            <i class="fas fa-copy me-2"></i> کپی
+                        </button>
+                        <button class="btn btn-info" onclick="generateNew()">
+                            <i class="fas fa-sync me-2"></i> تولید جدید
+                        </button>
+                    </div>
+                </div>
+
+                <div id="loading" class="text-center mt-4" style="display: none;">
+                    <div class="spinner-border" style="color: #3b82f6;" role="status">
+                        <span class="visually-hidden">در حال تولید...</span>
+                    </div>
+                    <p class="mt-2 text-primary">در حال تولید پسورد...</p>
+                </div>
+
+                <div id="error" class="alert alert-danger mt-4" style="display: none;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4" data-aos="fade-up" data-aos-delay="1000">
+            <div class="card-header">
+                <h5 class="text-center">
+                    <i class="fas fa-shield-alt me-2"></i> نکات امنیتی
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3" data-aos="fade-right" data-aos-delay="1200">
+                                <i class="fas fa-check-circle text-success me-2"></i> 
+                                از پسوردهای طولانی استفاده کنید (حداقل 12 کاراکتر)
+                            </li>
+                            <li class="mb-3" data-aos="fade-right" data-aos-delay="1400">
+                                <i class="fas fa-check-circle text-success me-2"></i> 
+                                ترکیبی از حروف، اعداد و نمادها استفاده کنید
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3" data-aos="fade-left" data-aos-delay="1200">
+                                <i class="fas fa-check-circle text-success me-2"></i> 
+                                از پسوردهای یکسان برای حساب‌های مختلف استفاده نکنید
+                            </li>
+                            <li class="mb-3" data-aos="fade-left" data-aos-delay="1400">
+                                <i class="fas fa-check-circle text-success me-2"></i> 
+                                پسوردهای خود را به صورت منظم تغییر دهید
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const lengthSlider = document.getElementById('length');
+    const lengthValue = document.getElementById('lengthValue');
+    const form = document.getElementById('passwordForm');
+    const passwordResult = document.getElementById('passwordResult');
+    const generatedPassword = document.getElementById('generatedPassword');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Update length display
+    lengthSlider.addEventListener('input', function() {
+        lengthValue.textContent = this.value;
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        generatePassword();
+    });
+
+    function generatePassword() {
+        // Hide previous results
+        passwordResult.style.display = 'none';
+        error.style.display = 'none';
+        loading.style.display = 'block';
+
+        // Get form data
+        const formData = {
+            length: parseInt(lengthSlider.value),
+            include_uppercase: document.getElementById('include_uppercase').checked,
+            include_lowercase: document.getElementById('include_lowercase').checked,
+            include_numbers: document.getElementById('include_numbers').checked,
+            include_symbols: document.getElementById('include_symbols').checked
+        };
+
+        // Send request
+        fetch('{% url "generate_password" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            loading.style.display = 'none';
+            if (data.error) {
+                errorMessage.textContent = data.error;
+                error.style.display = 'block';
+            } else {
+                generatedPassword.textContent = data.password;
+                passwordResult.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            errorMessage.textContent = 'خطا در تولید پسورد. لطفاً دوباره تلاش کنید.';
+            error.style.display = 'block';
+        });
+    }
+
+    // Copy password function
+    window.copyPassword = function() {
+        const password = generatedPassword.textContent;
+        navigator.clipboard.writeText(password).then(function() {
+            // Show success message
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> کپی شد!';
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-success');
+            setTimeout(function() {
+                btn.innerHTML = originalText;
+                btn.classList.remove('btn-outline-success');
+                btn.classList.add('btn-success');
+            }, 2000);
+        });
+    };
+
+    // Generate new password function
+    window.generateNew = function() {
+        generatePassword();
+    };
+});
+</script>
+{% endblock %}
